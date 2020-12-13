@@ -1,0 +1,339 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct node
+{
+    int data;
+    char name[30];
+    struct node *next;
+};
+
+struct node* head=NULL; // starting node of list
+
+FILE* fp;
+void OpenFileRead();
+void AppendListFromFile();
+void OpenFileWrite();
+void WriteListToFile();
+
+
+void OpenFileRead()
+{
+    char filename[20];
+
+    /* Open the file for reading. - fp is global */
+    if ( (fp = fopen("test.txt", "r")) == NULL)
+    {
+        fprintf(stderr, "Error opening file.\n");
+    }
+    else
+    {
+        printf("Read file opened\n",filename);
+    }
+
+}
+
+void AppendListFromFile()
+{
+    char line[20];
+    char* token;
+    char s[]=",";
+    int num;
+
+    while(fgets(line, sizeof line, fp) != NULL)
+    {
+        /* get the first token */
+        token = strtok(line, s);
+
+        /* walk through other tokens */
+        while( token != NULL )
+        {
+            
+            sscanf(token, "%d", &num);  // scan scring for integer
+            append(num); // add to end of list
+
+            token = strtok(NULL, s);
+            
+        }
+    }
+
+    printf("All element in the list are : \n");
+    display(head);
+
+    return;
+}
+
+void append(int num)  //add to end of list
+{
+    struct node *temp,*right;
+    // create a new temp node
+    temp= (struct node *)malloc(sizeof(struct node)); //create temp node
+    temp->data=num;  //set temp value
+    temp->next=NULL; // set as end of list
+
+    right= head;
+    if (right==NULL)
+    {
+        // then no head node exists yet, so set temp as head
+        head=temp;
+
+    }
+    else
+    {
+        // find end of current list
+        while(right->next != NULL)
+            right=right->next;
+        // right is now the last node in list (next==NULL)
+        // set temp as new next node
+        right->next =temp;
+    }
+
+}
+
+void add( int num )  // add to beginning of list
+{
+    struct node *temp;
+    // create a new temp node
+    temp=(struct node *)malloc(sizeof(struct node)); //create unnamed node and pointer
+    temp->data=num;  //set temp data value
+    temp->next=NULL;  // set as end of list
+
+    if (head== NULL)
+    {
+        // then list empty, so set as head node
+        head=temp;
+        head->next=NULL;
+    }
+    else
+    {
+        // else add to left of list
+        temp->next=head;
+        head=temp;
+    }
+}
+
+
+int delete(int num)
+{
+    struct node *temp, *prev;
+    // start at first node
+    temp=head;
+    // loop until end of list
+    while(temp!=NULL)
+    {
+        // does the data match?
+        if(temp->data==num)
+        {
+            // yes, then is start or other node?
+            if(temp==head)
+            {
+                // start node, so delete it
+                head=temp->next;
+                free(temp);
+                return 1;
+            }
+            else
+            {
+                // node in list, so delete it
+                prev->next=temp->next;
+                free(temp);
+                return 1;
+            }
+        }
+        else
+        {
+            //continue search on down list
+            prev=temp;
+            temp= temp->next;
+        }
+    }
+    return 0;
+}
+
+void  display(struct node *r)
+{
+    // list node contents from first to last
+    r=head;
+    int cnt = 0;
+
+    if(r==NULL)
+    {
+        return;
+    }
+    while(r!=NULL)
+    {
+        if(cnt++!=10)
+            printf("%d, ",r->data);
+        else
+        {
+            printf("%d\n",r->data);
+            cnt=0;
+        }
+
+        r=r->next;
+    }
+    printf("\n");
+}
+
+
+int  main()
+{
+    int i,num;
+    char ch;
+
+    head=NULL;
+    while(1)
+    {
+
+        puts("\nEnter your choice : (0: menu)");
+        if(scanf("%d",&i)<=0)
+        {
+            printf("Enter only an Integer\n");
+            exit(0);
+        }
+        else
+        {
+            switch(i)
+            {
+            	
+            case 1:
+                OpenFileRead();
+                break;
+                
+            case 2:
+                printf("Enter the number to add to beginning : ");
+                scanf("%d",&num);
+                add(num);
+                break;
+                
+            case 3:
+                printf("Enter the number to append to end : ");
+                scanf("%d",&num);
+                append(num);
+                break;
+
+            
+            case 4:
+                if(head==NULL)
+                    printf("List is Empty\n");
+                else
+                {
+                    printf("Enter the number to delete : ");
+                    scanf("%d",&num);
+                    if(delete(num))
+                        printf("%d deleted successfully\n",num);
+                    else
+                        printf("%d not found in the list\n",num);
+                }
+                break;
+            
+			case 5:
+                AppendListFromFile();
+                break;
+                
+            case 6:
+                OpenFileWrite();
+                break;
+
+
+            case 7:
+            	bubbleSort(head);
+                break;
+
+
+            default:
+                puts("1.Open File Read           2.Add at beginning      3.Append to end");
+                puts("4.Delete                   5.Show List             6.Save List Update ");
+                puts("7.Sorting price");
+                
+
+            }
+        }
+    }
+    return 0;
+}
+
+void OpenFileWrite()
+{
+   
+    /* Open the file for reading. - fp is global */
+    if ( (fp = fopen("test.txt", "w")) == NULL)
+    {
+        fprintf(stderr, "Error opening file.\n");
+    }
+    else
+    {
+        printf("%s Write file opened\n");
+    }
+    
+   
+    struct node *r=head;
+
+    int cnt = 0;
+
+    if(r==NULL)
+    {
+        return;
+    }
+    while(r!=NULL)
+    {
+        if(cnt++!=10)
+            fprintf(fp, "%d, ",r->data);
+        else
+        {
+            fprintf(fp, "%d\n",r->data);
+            cnt=0;
+        }
+
+        r=r->next;
+    }
+    fprintf(fp, "\n");
+    
+  
+    int result;
+    result = fclose(fp);
+    if(result != 0)
+        printf ("File close failed\n");
+    else
+        printf("File closed successfully\n");
+    return;
+
+}
+
+void bubbleSort(struct Node *head) 
+{ 
+    int swapped, i; 
+    struct node *temp; 
+    struct node *lptr = NULL; 
+  
+    /* Checking for empty list */
+    if (head == NULL) 
+        return; 
+  
+    do
+    { 
+        swapped = 0; 
+        temp = head; 
+  
+        while (temp->next != lptr) 
+        { 
+            if (temp->data > temp->next->data) 
+            {  
+                swap(temp, temp->next); 
+                swapped = 1; 
+            } 
+            temp = temp->next; 
+        } 
+        lptr = temp; 
+    } 
+    while (swapped); 
+} 
+  
+/* function to swap data of two nodes a and b*/
+void swap(struct node *a, struct node *b) 
+{ 
+    int r = a->data; 
+    a->data = b->data; 
+    b->data = r; 
+} 
