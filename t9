@@ -1,0 +1,874 @@
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+#include<stdlib.h>
+#include <time.h>
+struct node
+{
+    char name[30],gender[2],email[50],clas[10];
+    char cname[30],cgender[2],cemail[50],cclas[10];
+    char tna[100],src[50],dest[50];
+    int nop,age,cage,n,adult,child,not,ptno;
+    char mobno[20];
+    char idno[30],cidno[30];
+    char x[10];
+    int ttt,tno;
+    char source[20],destination[20],date[20],data[100],alltrains[500];
+    float fare,cfare,insurance,total,km,arr,dept;
+    char adname[50],adpass[50];
+	struct node *next;
+
+};
+
+struct pop
+{
+    int ttt,tno;
+    char tna[100],src[50],dest[50];
+    float km,arr,dept;
+};
+
+struct pop obj;
+struct node *head=NULL,*headd=NULL,*p,*r,*last=NULL,*lastt=NULL,*q=NULL,*s=NULL;
+
+int n,m,i;
+
+void book();
+void display();
+void display1();
+void sort();
+void searchtrains();
+struct node* insert();
+struct node* inserttrainsbw();
+void write();
+void writedatabase();
+void writesorteddb();
+void readsorteddb();
+void read();
+void readdatabase();
+void deletetrains();
+void railwaydatabase();
+void inserttrains();
+void displaytrains();
+void displaysortedtrains();
+void modify();
+void backup();
+void import();
+void export1();
+void trainenquiry();
+void trainselect();
+void payout();
+void payoutread();
+void payoutwrite();
+void displaysearchtrainticket();
+int count1=0;int count2=0;int count3=0;int count4=0;
+void admin();
+void readadmin();
+void writeadmin();
+void adminprofile();
+void loggedadmin();
+void modifyadmin();
+void deleteadmin();
+void displayadmin();
+int found=0;
+int ch,x,c=' ',choice1,choice2;
+char str1[20],str2[20],str3[20],str4[20];
+char str5[]="admin",str6[]="admin",str7[20],str8[20];
+char choice3[]="y",choice4[10],choice5[10];
+ char adname[50],adpass[50];char input[255];
+ int status1;
+
+
+int main()
+{
+    system("color f1");
+    FILE *infile;
+    railwaydatabase();
+}
+
+
+
+
+
+
+
+
+
+
+void railwaydatabase()
+{                do{
+                system("CLS");
+                printf("\n--------------------------------------------------------\n");
+                printf("                        MENU                      ");
+                printf("\n--------------------------------------------------------\n\n");
+                printf("\t1. Add trains \n");
+                printf("\t2. Insert train at specific location\n");
+                printf("\t3. Sort the trains\n");
+                printf("\t4. Delete the trains \n");
+                printf("\t5. Search the trains \n");
+                printf("\t6. Modify the trains \n");
+                printf("\t7. Display the trains \n");
+                printf("\t8. Database backup \n");
+                printf("\t0. EXIT\n");
+                printf("\n--------------------------------------------------------\n");
+                printf("Choice:\t");
+                scanf("%d",&choice2);
+                switch(choice2)
+                {
+                    case 1:// system("CLS");
+                            inserttrains();
+                      printf("\n\t\tPress Any Key to Continue ....!!!!!!!\n") ;
+                            getch();
+                            break;
+                    case 2: //system("CLS");
+                            displaytrains();
+                            inserttrainsbw();
+                    printf("\n\t\tPress Any Key to Continue ....!!!!!!!\n") ;
+                            getch();
+
+                            break;
+                    case 3: //system("CLS");
+                            sorttrains();
+                            displaysortedtrains();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 4: //system("CLS");
+                            displaysortedtrains();
+                            deletetrains();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 5: //system("CLS");
+                            displaysortedtrains();
+                            searchtrains();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 6: //system("CLS");
+                            displaysortedtrains();
+                            modify();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 7: //system("CLS");
+                            specialtraindisplay();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 8: //system("CLS");
+                            backup();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                }
+                }while(choice2!=0);
+}
+
+void inserttrains()
+{   do{
+    readdatabase();
+
+    found=0;
+    p=head;
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+    scanf("\t%d %s",&(obj.tno),obj.src);
+    /*strlwr(obj.src),strlwr(obj.dest),strlwr(obj.tna);
+                            for(i=1;p!=NULL;i++)
+                            {
+                            if(p->tno==obj.tno)
+                            {
+    printf("\n%d\t %s\t\t %s\t\t %s\t\t %.2f\t\t %.2f\t\t\t %.2f\t\t %d",(p->tno),p->src,p->dest,p->tna,p->km,p->arr,p->dept,(p->ttt));
+                            found=1;
+                            printf("\n\t\t Oopps  !!!  Train Already Present ....\n") ;
+                            }
+                            p=p->next;*/
+
+                            }while(found==1);
+
+
+
+    struct node *p;
+	int i=0;
+	p=last;
+	if(last==NULL)
+	{
+	i=1;
+	last=(struct node*)malloc(sizeof(struct node));
+	last->next=NULL;
+	last->tno=obj.tno;
+    strcpy(last->src,obj.src);
+	p=last;
+	head=last;
+	}//if
+else{i=0;
+	p=last;
+	p->next=(struct node*)malloc(sizeof(struct node));
+	p=p->next;
+	last=p;
+    p->tno=obj.tno;
+    strcpy(p->src,obj.src);
+	p->next=NULL;
+	}//i for
+   writedatabase();
+                         printf("\n\n\t\tTrain Added Successfully ....!!!!!!!\n\n") ;
+
+}
+
+void specialtraindisplay()
+{
+     do{
+                system("CLS");
+                printf("\n--------------------------------------------------------\n");
+                printf("                    DISPLAY MENU                      ");
+                printf("\n--------------------------------------------------------\n\n");
+                printf("\t1. Unsorted trains \n");
+                printf("\t2. Sorted trains\n");
+                printf("\t0. EXIT\n");
+                printf("\n--------------------------------------------------------\n");
+                printf("Choice:\t");
+                scanf("%d",&choice2);
+                switch(choice2)
+                {
+                    case 1: system("CLS");
+                            readdatabase();
+                             p=head;
+                            if(p==NULL)
+                            {
+                            printf("list is empty");
+                            }
+                            else
+                                {
+                            printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+                            printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+                            printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=0;p!=NULL;i++)
+                            {
+                            printf("\n%d\t %s",(p->tno),p->src);
+                            p=p->next;
+                            }}
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 2: system("CLS");
+                            readsorteddb();
+                            p=head;
+                            if(p==NULL)
+                            {
+                            printf("list is empty");
+                            }
+                            else
+                                {
+                            printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+                            printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+                            printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=0;p!=NULL;i++)
+                            {
+                            printf("\n%d\t %s",(p->tno),p->src);
+                            p=p->next;
+                            }}
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+
+                }
+                }while(choice2!=0);
+
+}
+
+
+void displaytrains()
+{
+    readdatabase();
+	p=head;
+	if(p==NULL)
+	{
+	printf("list is empty");
+	}
+	else
+{
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+    for(i=0;p!=NULL;i++)
+	{
+ printf("\n%d\t %s",(p->tno),p->src);
+	p=p->next;
+	}}}
+
+void writedatabase()
+	{
+	FILE *ne=fopen("Railway_database.txt","w");
+	int i;
+	struct node *temp;
+	temp=head;
+	if(temp==NULL)
+	{
+	    printf("Empty File");
+	}
+	else
+	{
+	for(i=0;temp!=NULL;i++)
+	{
+fprintf(ne,"\n%d\t\t %s",(temp->tno),temp->src);
+   temp=temp->next;
+	}//for
+	}//else
+	fclose(ne);
+	}
+
+void readdatabase()
+	{
+	int i,filempty=0;
+	FILE *infile=fopen("Railway_database.txt","r");
+	p=head;
+	fseek(infile,0,SEEK_END);
+	if(p==NULL)
+	{
+	p=(struct node*)malloc(sizeof(struct node));
+	head=p;
+	}
+	int len=(int)ftell(infile);
+	if(len<=0)
+	{
+	filempty=1;
+	printf("File empty");
+	p=NULL;
+	head=p;
+	}
+	if(filempty==0)
+	{
+	rewind(infile);
+	while(fscanf(infile,"\n%d\t\t %s",&(p->tno),p->src))
+{
+	if(feof(infile))
+	{
+	break;
+	}
+	p->next=(struct node*)malloc(sizeof(struct node));
+	p=p->next;
+	last=p;
+	p->next=NULL;
+}}}
+struct node* inserttrainsbw()
+{
+    readdatabase();
+    int i,loc;
+    int tno,ttt;
+    char tna[100],src[50],dest[50];
+    float arr,dept,km;
+    printf("\nEnter the position:");
+    scanf("%d",&loc);
+   do{
+        readdatabase();
+    printf("\n---------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No || Source || Destination || Train name || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n---------------------------------------------------------------------------------------------------------------------\n   ");
+    scanf("\t%d %s",&(tno),src);
+    /*strlwr(src),strlwr(dest),strlwr(tna);
+    found=0;
+    p=head;
+    for(i=1;p!=NULL;i++)
+                            {
+                            if(p->tno==tno)
+                            {
+    printf("\n%d\t %s\t\t %s\t\t %s\t\t %.2f\t\t %.2f\t\t\t %.2f\t\t %d",(p->tno),p->src,p->dest,p->tna,p->km,p->arr,p->dept,(p->ttt));
+                            found=1;
+                            printf("\n\t\t Oopps  !!!  Train Already Present ....\n") ;
+                            }
+                            p=p->next;
+
+                            }*/}while(found==1);
+
+    p=head;
+	q=head;
+    p=(struct node*)malloc(sizeof(struct node));
+    p->tno=tno;
+    strcpy(p->src,src);
+    p->next=NULL;
+    if(loc==1)
+    {
+        p->next=head;
+	head=p;
+        writedatabase();
+        return(p);
+    }
+    q=head;
+    for(i=1;i<loc-1;i++)
+    {
+        if(q!=NULL)
+        {
+            q=q->next;
+        }
+    }
+    p->next=q->next;
+    q->next=p;
+    n=n+1;
+    writedatabase();
+                             printf("\n\n\t\tTrain Added Successfully ....!!!!!!!\n\n") ;
+
+    return(head);
+}
+
+void sorttrains()
+	{
+	int k;
+	readdatabase();
+	int temp;
+	struct node *i,*j;
+	for(i=head;i!=NULL;i=i->next)
+	{
+        for(j=i->next;j!=NULL;j=j->next)
+        {
+            if((i->tno)>(j->tno))			//write integer variable only in place of data
+            {
+                obj.tno=i->tno;
+                
+
+                i->tno=j->tno;
+                
+
+                j->tno=obj.tno;
+                
+
+                strcpy(obj.src,i->src);
+                strcpy(i->src,j->src);
+                strcpy(j->src,obj.src);
+                
+
+             }}}//i for
+
+	writesorteddb();
+	}//void sort
+
+void writesorteddb()
+	{
+	FILE *ne=fopen("Sorted_Railway_database.txt","w");
+	int i;
+	struct node *temp;
+	temp=head;
+	if(temp==NULL)
+	{
+	    printf("list is empty");
+	}
+	else
+	{
+	for(i=0;temp!=NULL;i++)
+	{
+		fprintf(ne,"\n%d\t\t %s",(temp->tno),temp->src);
+    temp=temp->next;
+	}//for
+	}//else
+	fclose(ne);
+	}
+
+void readsorteddb()
+	{
+	int i,filempty=0;
+	FILE *infile=fopen("Sorted_Railway_database.txt","r");
+	p=head;
+	fseek(infile,0,SEEK_END);
+	if(p==NULL)
+	{
+	p=(struct node*)malloc(sizeof(struct node));
+	head=p;
+	}
+	int len=(int)ftell(infile);
+	if(len<=0)
+	{
+	filempty=1;
+	printf("File empty");
+	p=NULL;
+	head=p;
+	}
+	if(filempty==0)
+	{
+	rewind(infile);
+	while(fscanf(infile,"\n%d\t\t %s",&(p->tno),p->src))
+{
+	if(feof(infile))
+	{
+	break;
+	}
+	p->next=(struct node*)malloc(sizeof(struct node));
+	p=p->next;
+	last=p;
+	p->next=NULL;
+}}}
+
+void displaysortedtrains()
+{
+	readsorteddb();
+	int i;
+	p=head;
+	if(p==NULL)
+	{
+	printf("list is empty");
+	}
+	else
+		{
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+	for(i=0;p!=NULL;i++)
+	{
+    printf("\n%d\t %s",(p->tno),p->src);
+	p=p->next;
+}}}
+
+void deletetrains()
+{   struct node *p,*q;
+	readsorteddb();
+	int loc,i;
+	printf("\nEnter the location to delete:\t");
+	scanf("%d",&loc);
+	if(p!=NULL)
+	{
+	    if(loc==1)
+    {
+        p=head;
+        head=head->next;
+        writesorteddb();
+        displaysortedtrains();
+        free(p);
+        return(head);
+    }
+    else{q=head;}
+    for(i=1;i<loc-1;i++)
+    {
+        q=q->next;
+    }
+    p=q->next;
+    q->next=p->next;
+    writesorteddb();
+    displaysortedtrains();
+    free(p);
+    n=n-1;
+	}
+	else
+	{
+	printf("\nSorry,The list is empty");
+	}}
+
+void searchtrains()
+	{ readsorteddb();
+	int ttt,tno,found=0;
+    char tna[100],src[50],dest[50];
+	p=head;
+	int choice2;
+                do{
+                system("CLS");
+                printf("\n--------------------------------------------------------\n");
+                printf("                       SEARCH MENU                      ");
+                printf("\n--------------------------------------------------------\n\n");
+                printf("\t1. Train Number \n");
+                printf("\t2. Source\n");
+                printf("\t3. Destination\n");
+                printf("\t4. Train Name\n");
+                printf("\t0. EXIT\n");
+                printf("\n--------------------------------------------------------\n");
+                printf("Choice:\t");
+                scanf("%d",&choice2);
+                switch(choice2)
+                {
+                    case 1:// system("CLS");
+                            readsorteddb();
+                            	p=head;
+                            printf("\n\nEnter the Train No:\t");
+                            scanf("%d",&tno);
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=1;p!=NULL;i++)
+                            {
+                            if(p->tno==tno)
+                            {
+    printf("\n%d\t %s",(p->tno),p->src);
+                            found=1;
+                            }
+                            p=p->next;
+                            }
+                            if(!found)
+                            {
+                            printf("\n\t Oops !!!! Data not found\n\n");
+                            }
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 2:// system("CLS");
+                            readsorteddb();
+                            	p=head;
+                            printf("\n\nEnter the Source:\t");
+                            scanf("%s",src);
+                            strlwr(src);
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=1;p!=NULL;i++)
+                            {
+                            if(strcmp(p->src,src)==0)
+                            {
+    printf("\n%d\t %s",(p->tno),p->src);
+                            found=1;
+                            }
+                            p=p->next;
+                            }
+                            if(!found)
+                            {
+                            printf("\n\t Oops !!!! Data not found\n\n");
+                            }
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                     case 3:// system("CLS");
+                            readsorteddb();
+                            	p=head;
+                            printf("\n\nEnter the Destination:\t");
+                            scanf("%s",dest);
+                            strlwr(dest);
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=1;p!=NULL;i++)
+                            {
+                            if(strcmp(p->dest,dest)==0)
+                            {
+    printf("\n%d\t %s",(p->tno),p->src);
+                            found=1;
+                            }
+                            p=p->next;
+                            }
+                            if(!found)
+                            {
+                            printf("\n\t Oops !!!! Data not found\n\n");
+                            }
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                     case 4:// system("CLS");
+                            readsorteddb();
+                            	p=head;
+                            printf("\n\nEnter the Train Name:\t");
+                            scanf("%s",tna);
+                            strlwr(tna);
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No|| Source || Destination ||    Train name    || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------\n   ");
+                            for(i=1;p!=NULL;i++)
+                            {
+                            if(strcmp(p->tna,tna)==0)
+                            {
+    printf("\n%d\t %s",(p->tno),p->src);
+                            found=1;
+                            }
+                            p=p->next;
+                            }
+                            if(!found)
+                            {
+                            printf("\n\t Oops !!!! Data not found\n\n");
+                            }
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                }
+                }while(choice2!=0);}
+void modify()
+{
+     struct node *p,*q;
+	readsorteddb();
+	int loc,i;
+	printf("\nEnter the location to Modify:\t");
+	scanf("%d",&loc);
+	if(p!=NULL)
+	{
+	    if(loc==1)
+    {
+        p=head;
+        head=head->next;
+        writesorteddb();
+        displaysortedtrains();
+        free(p);
+        return(head);
+    }
+    else{q=head;}
+    for(i=1;i<loc-1;i++)
+    {
+        q=q->next;
+    }
+    p=q->next;
+    q->next=p->next;
+    writesorteddb();
+    displaysortedtrains();
+    free(p);
+    n=n-1;
+	}
+	else
+	{
+	printf("\nSorry,The list is empty");
+	}
+ readsorteddb();
+	p=head;
+	q=head;
+    int tno,ttt;
+    char tna[100],src[50],dest[50];
+    float km,arr,dept;
+    printf("\n---------------------------------------------------------------------------------------------------------------------\n");
+    printf("Train No || Source || Destination || Train name || Distance(KM) || Arr. time(Hrs) || Dept. time(Hrs) || Duration||");
+    printf("\n---------------------------------------------------------------------------------------------------------------------\n   ");
+    scanf("\t%d %s",&(tno),src);
+    strlwr(src),strlwr(dest),strlwr(tna);
+    p=(struct node*)malloc(sizeof(struct node));
+    p->tno=tno;
+    strcpy(p->src,src);
+    p->next=NULL;
+    if(loc==1)
+    {
+        p->next=head;
+	head=p;
+        writedatabase();
+        return(p);
+    }
+    q=head;
+    for(i=1;i<loc-1;i++)
+    {
+        if(q!=NULL)
+        {
+            q=q->next;
+        }
+    }
+    p->next=q->next;
+    q->next=p;
+    n=n+1;
+   writesorteddb();
+    return(head);
+}
+
+void backup()
+{
+    int choice2;
+                do{
+                //system("CLS");
+                printf("\n--------------------------------------------------------\n");
+                printf("                        MENU                      ");
+                printf("\n--------------------------------------------------------\n\n");
+                printf("\t1. Import Database \n");
+                printf("\t2. Export Database\n");
+                printf("\t0. EXIT\n");
+                printf("\n--------------------------------------------------------\n");
+                printf("Choice:\t");
+                scanf("%d",&choice2);
+                switch(choice2)
+                {
+                    case 1:// system("CLS");
+                            import();
+                            printf("\n\t IMPORTING BACKUP \n");
+                            printf("\n\t IMPORTING BACKUP \n");
+                            printf("\n\t---- Done---- Successfully Imported data !!!!!!.");
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                    case 2: //system("CLS");
+                            export1();
+                            printf("\n\n\n0. MAIN MENU\t\t\t");
+                            printf("1. SUB MENU\n\n");
+                            printf("Choice:\t");
+                            scanf("%d",&choice2);
+                            break;
+                }
+                }while(choice2!=0);
+}
+
+void export1()
+{   readsorteddb();
+    FILE *xp=fopen("Backup.txt","w");
+	int i;
+	struct node *temp;
+	temp=head;
+	if(temp==NULL)
+	{
+	    printf("list is empty");
+	}
+	else
+	{
+	printf("\n\t TAKING BACKUP \n");
+	printf("\n\t TAKING BACKUP\n");
+	for(i=0;temp!=NULL;i++)
+	{
+		fprintf(xp,"\n%d\t\t %s",(temp->tno),temp->src);
+    temp=temp->next;
+	}//for
+	printf("\n\t---- Done---- BACKUP TAKEN !!!!!!.");
+	}//else
+	fclose(xp);
+}
+
+void import()
+{
+    int i,filempty=0;
+    FILE *imp=fopen("Backup.txt","r");
+	p=head;
+	fseek(imp,0,SEEK_END);
+	if(p==NULL)
+	{
+	p=(struct node*)malloc(sizeof(struct node));
+	head=p;
+	}
+
+	int len=(int)ftell(imp);
+	if(len<=0)
+	{
+	filempty=1;
+	printf("File empty");
+	p=NULL;
+	head=p;
+	}
+	if(filempty==0)
+	{
+	rewind(imp);
+	while(fscanf(imp,"\n%d\t\t %s",&(p->tno),p->src))
+	{
+	if(feof(imp))
+	{
+	break;
+	}
+	p->next=(struct node*)malloc(sizeof(struct node));
+	p=p->next;
+	last=p;
+	p->next=NULL;
+	}
+	}
+	writesorteddb();
+}
+
+
+
+
+
+
