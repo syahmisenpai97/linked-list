@@ -1,0 +1,355 @@
+//MUHAMMAD SYAHMI BIN SAMURI 191023007
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+#include<stdlib.h>
+
+struct node {
+
+  char name[50];
+  int item_no;
+  struct node *next;
+
+};
+
+struct pop {
+  int no;
+  char name[50];
+
+};
+
+struct pop obj;
+struct node *head = NULL, *p, *r, *last = NULL, *q = NULL, *s = NULL;
+
+int n, i;
+
+struct node *specificAddItem();
+void writedatabase();
+void writesorteddb();
+void readsorteddb();
+void readdatabase();
+void deleteitem();
+void grocerydatabase();
+void insertItem();
+void displayitem();
+void displaysorteditem();
+
+int found = 0;
+int choice2;
+
+int main() {
+  FILE *infile;
+  grocerydatabase();
+}
+
+void grocerydatabase() {
+  do {
+    system("CLS");
+    printf("------------------------MENU------------------------\n");
+
+    printf("\t1. Add Item \n");
+    printf("\t2. Insert item at specific location\n");
+    printf("\t3. Display the item list \n");
+    printf("\t4. Sort the item\n");
+    printf("\t5. Delete the item \n");
+    printf("\t0. EXIT\n");
+    printf("\n--------------------------------------------------------\n");
+    printf("Choice:\t");
+    scanf("%d", & choice2);
+    switch (choice2) {
+    case 1:
+      insertItem();
+      printf("\n\t\tPress Any Key to Continue ....!!!!!!!\n");
+      getch();
+      break;
+    case 2:
+      displayitem();
+      specificAddItem();
+      printf("\n\t\tPress Any Key to Continue ....!!!!!!!\n");
+      getch();
+      break;
+    case 3:
+      system("CLS");
+      displayitem();
+      printf("\n\t\tPress Any Key to Continue ....!!!!!!!\n");
+      getch();
+      break;
+    case 4:
+      sortItem();
+      displaysorteditem();
+      printf("\n\t\t\tItem Sorted!! \n");
+      printf("\t\tPress Any Key to Continue ....!!!!!!!\n");
+      getch();
+      break;
+    case 5:
+      displaysorteditem();
+      deleteitem();
+      printf("\n\t\t\tDelete Succesfully \n");
+      printf("\t\tPress Any Key to Continue ....!!!!!!!\n");
+      getch();
+      break;
+    }
+  } while (choice2 != 0);
+}
+
+void insertItem() {
+  do {
+    readdatabase();
+
+    found = 0;
+    p = head;
+    printf("\n----------------------\n");
+    printf("Grocery_id|| Item Name ");
+    printf("\n----------------------\n   ");
+    scanf("\t%d %s", & (obj.no), obj.name);
+  } while (found == 1);
+
+  struct node *p;
+  int i = 0;
+  p = last;
+  if (last == NULL) {
+    i = 1;
+    last = (struct node *) malloc(sizeof(struct node));
+    last -> next = NULL;
+    last -> item_no = obj.no;
+    strcpy(last -> name, obj.name);
+    p = last;
+    head = last;
+  } 
+  else {
+    i = 0;
+    p = last;
+    p -> next = (struct node *) malloc(sizeof(struct node));
+    p = p -> next;
+    last = p;
+    p -> item_no = obj.no;
+    strcpy(p -> name, obj.name);
+    p -> next = NULL;
+  } 
+  writedatabase();
+  printf("\n\t\tItem Added Successfully\n");
+
+}
+
+void displayitem() {
+  readdatabase();
+  p = head;
+  if (p == NULL) {
+    printf("list is empty");
+  } else {
+    printf("\n----------------------\n");
+    printf("Grocery_id|| Item Name ");
+    printf("\n----------------------\n   ");
+    for (i = 0; p != NULL; i++) {
+      printf("\n%d\t %s", (p -> item_no), p -> name);
+      p = p -> next;
+    }
+  }
+}
+
+void writedatabase() {
+  FILE *ne = fopen("grocery_database.txt", "w");
+  int i;
+  struct node *temp;
+  temp = head;
+  if (temp == NULL) {
+    printf("Empty File");
+  } else {
+    for (i = 0; temp != NULL; i++) {
+      fprintf(ne, "\n%d\t\t %s", (temp -> item_no), temp -> name);
+      temp = temp -> next;
+    } 
+  } 
+  fclose(ne);
+}
+
+void readdatabase() {
+  int i, filempty = 0;
+  FILE *infile = fopen("grocery_database.txt", "r");
+  p = head;
+  fseek(infile, 0, SEEK_END);
+  if (p == NULL) {
+    p = (struct node *) malloc(sizeof(struct node));
+    head = p;
+  }
+  int len = (int) ftell(infile);
+  if (len <= 0) {
+    filempty = 1;
+    printf("ReadFile: File empty");
+    p = NULL;
+    head = p;
+  }
+  if (filempty == 0) {
+    rewind(infile);
+    while (fscanf(infile, "\n%d\t\t %s", & (p -> item_no), p -> name)) {
+      if (feof(infile)) {
+        break;
+      }
+      p -> next = (struct node *) malloc(sizeof(struct node));
+      p = p -> next;
+      last = p;
+      p -> next = NULL;
+    }
+  }
+}
+struct node *specificAddItem() {
+  readdatabase();
+  int i, loc;
+  int item_no;
+  char name[50];
+
+  printf("\nEnter the position:");
+  scanf("%d", & loc);
+  do {
+    readdatabase();
+    printf("\n----------------------\n");
+    printf("Grocery_id|| Item Name ");
+    printf("\n----------------------\n   ");
+    scanf("\t%d %s", & (item_no), name);
+  } while (found == 1);
+
+  p = head;
+  q = head;
+  p = (struct node *) malloc(sizeof(struct node));
+  p -> item_no = item_no;
+  strcpy(p -> name, name);
+  p -> next = NULL;
+  if (loc == 1) {
+    p -> next = head;
+    head = p;
+    writedatabase();
+    return (p);
+  }
+  q = head;
+  for (i = 1; i < loc - 1; i++) {
+    if (q != NULL) {
+      q = q -> next;
+    }
+  }
+  p -> next = q -> next;
+  q -> next = p;
+  n = n + 1;
+  writedatabase();
+  printf("\n\t\tItem Added Successfully\n");
+
+  return (head);
+}
+
+void sortItem() {
+  int k;
+  readdatabase();
+  int temp;
+  struct node *i, *j;
+  for (i = head; i != NULL; i = i -> next) {
+    for (j = i -> next; j != NULL; j = j -> next) {
+      if ((i -> item_no) > (j -> item_no))
+      {
+        obj.no = i -> item_no;
+
+        i -> item_no = j -> item_no;
+
+        j -> item_no = obj.no;
+
+        strcpy(obj.name, i -> name);
+        strcpy(i -> name, j -> name);
+        strcpy(j -> name, obj.name);
+
+      }
+    }
+  } 
+
+  writesorteddb();
+} 
+
+void writesorteddb() {
+  FILE *ne = fopen("grocery_database.txt", "w");
+  int i;
+  struct node *temp;
+  temp = head;
+  if (temp == NULL) {
+    printf(" list is empty");
+  } else {
+    for (i = 0; temp != NULL; i++) {
+      fprintf(ne, "\n%d\t\t %s", (temp -> item_no), temp -> name);
+      temp = temp -> next;
+    } 
+  } 
+  fclose(ne);
+}
+
+void readsorteddb() {
+  int i, filempty = 0;
+  FILE *infile = fopen("grocery_database.txt", "r");
+  p = head;
+  fseek(infile, 0, SEEK_END);
+  if (p == NULL) {
+    p = (struct node *) malloc(sizeof(struct node));
+    head = p;
+  }
+  int len = (int) ftell(infile);
+  if (len <= 0) {
+    filempty = 1;
+    printf("ReadFile: File empty");
+    p = NULL;
+    head = p;
+  }
+  if (filempty == 0) {
+    rewind(infile);
+    while (fscanf(infile, "\n%d\t\t %s", & (p -> item_no), p -> name)) {
+      if (feof(infile)) {
+        break;
+      }
+      p -> next = (struct node *) malloc(sizeof(struct node));
+      p = p -> next;
+      last = p;
+      p -> next = NULL;
+    }
+  }
+}
+
+void displaysorteditem() {
+  readsorteddb();
+  int i;
+  p = head;
+  if (p == NULL) {
+    printf("list is empty");
+  } else {
+    printf("\n----------------------\n");
+    printf("Grocery_id|| Item Name ");
+    printf("\n----------------------\n   ");
+    for (i = 0; p != NULL; i++) {
+      printf("\n%d\t %s", (p -> item_no), p -> name);
+      p = p -> next;
+    }
+  }
+}
+
+void deleteitem() {
+  struct node *p, *q;
+  readsorteddb();
+  int loc, i;
+  printf("\nEnter the number location to delete:\t");
+  scanf("%d", & loc);
+  if (p != NULL) {
+    if (loc == 1) {
+      p = head;
+      head = head -> next;
+      writesorteddb();
+      displaysorteditem();
+      free(p);
+    } else {
+      q = head;
+    }
+    for (i = 1; i < loc - 1; i++) {
+      q = q -> next;
+    }
+    p = q -> next;
+    q -> next = p -> next;
+    writesorteddb();
+    displaysorteditem();
+    free(p);
+    n = n - 1;
+  } else {
+    printf("\nSorry,The list is empty");
+  }
+}
